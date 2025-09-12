@@ -8,3 +8,5 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [StudentController::class ,"index"]);
+Route::get('/raport', [StudentController::class ,"rapot"]);
+Route::get('/attendance', [StudentController::class ,"absen"]);

@@ -9,4 +9,12 @@ class StudentController extends Controller
     public function index() {
         return view("siswa.dashboard");
     }
+
+    public function rapot() {
+    return view("siswa.raport");
+    }
+
+    public function absen() {
+    return view("siswa.attendance");
+    }
 }
