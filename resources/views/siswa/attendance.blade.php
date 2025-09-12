@@ -39,7 +39,7 @@
                     class="absolute lg:relative top-full left-0 right-0 lg:flex lg:items-center lg:space-x-6 bg-white lg:bg-transparent shadow-md lg:shadow-none p-4 lg:p-0 hidden flex-col lg:flex-row space-y-4 lg:space-y-0">
                     <span id="active-indicator"
                         class="hidden lg:block absolute h-full bg-green-500 rounded-2xl active-indicator z-10"></span>
-                    <a href="dashboard.html" id="dashboard-btn"
+                    <a href="dashboard" id="dashboard-btn"
                         class="relative flex items-center space-x-2 text-gray-500 hover:text-gray-900 transition-colors duration-300 rounded-2xl py-2 px-4 z-20">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -47,7 +47,7 @@
                         </svg>
                         <span>Dashboard</span>
                     </a>
-                    <a href="raport.html" id="raport-btn"
+                    <a href="raport" id="raport-btn"
                         class="relative flex items-center space-x-2 text-gray-500 hover:text-gray-900 transition-colors duration-300 rounded-2xl py-2 px-4 z-20">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,7 +55,7 @@
                         </svg>
                         <span>Raport</span>
                     </a>
-                    <a href="attendance.html" id="attendance-btn"
+                    <a href="attendance" id="attendance-btn"
                         class="relative flex items-center space-x-2 text-gray-500 hover:text-gray-900 transition-colors duration-300 rounded-2xl py-2 px-4 z-20">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -314,7 +314,7 @@
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function (event) {
-                    // Cek apakah link adalah 'attendance.html', jika ya, cegah perilaku default agar tidak langsung pindah halaman
+                    // Cek apakah link adalah 'attendance', jika ya, cegah perilaku default agar tidak langsung pindah halaman
                     if (this.id === 'attendance-btn') {
                         event.preventDefault();
                     }
