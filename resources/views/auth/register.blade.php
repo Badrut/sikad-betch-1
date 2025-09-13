@@ -1,125 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Koperasi</title>
+    <title>Pendaftaran Koperasi Sekolah - Desain Baru</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
         }
 
-        .login-card {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transition: transform 0.2s ease-in-out;
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .login-card:hover {
-            transform: translateY(-2px);
+        .form-step.active {
+            display: block;
         }
 
-        .input-field:focus {
-            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
-        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-        .login-btn {
-            transition: all 0.2s ease-in-out;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="login-card bg-white rounded-2xl w-full max-w-md p-8">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center bg-green-50 rounded-full p-4 mb-4">
-                <img src="{{ asset('assets/logo.png') }}" alt="Logo Koperasi" class="mx-auto"
-                    style="width: 60px; height: 56px;">
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden md:flex">
+        <div class="md:w-1/3 bg-gradient-to-b from-green-500 to-emerald-600 p-8 text-white">
+            <div class="text-center md:text-left">
+                <img src="{{ asset('assets/logo.png') }}" alt="Logo Sekolah" class="w-16 h-auto mx-auto md:mx-0 mb-4">
+                <h2 class="text-2xl font-bold">Pendaftaran Anggota</h2>
+                <p class="text-green-200 mt-2 text-sm">Lengkapi data Anda melalui langkah-langkah berikut.</p>
             </div>
-            <h1 class="text-2xl font-bold text-gray-800 mb-1">Login Koperasi</h1>
-            <p class="text-gray-500 text-sm">Masuk untuk mengakses akun Anda</p>
+
+            <ul class="mt-12 space-y-4" id="step-indicator">
+                <li class="step flex items-center" data-step="1">
+                    <div
+                        class="step-number w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors duration-300">
+                        1</div>
+                    <div class="ml-4">
+                        <p class="text-sm text-green-200">Langkah 1</p>
+                        <p class="font-bold">Pilih Peran</p>
+                    </div>
+                </li>
+                <li class="step flex items-center" data-step="2">
+                    <div
+                        class="step-number w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors duration-300">
+                        2</div>
+                    <div class="ml-4">
+                        <p class="text-sm text-green-200">Langkah 2</p>
+                        <p class="font-bold">Data Diri</p>
+                    </div>
+                </li>
+                <li class="step flex items-center" data-step="3">
+                    <div
+                        class="step-number w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors duration-300">
+                        3</div>
+                    <div class="ml-4">
+                        <p class="text-sm text-green-200">Langkah 3</p>
+                        <p class="font-bold">Detail Info</p>
+                    </div>
+                </li>
+            </ul>
         </div>
 
-        <form id="loginForm" class="space-y-6">
-            <div>
-                <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Pilih Peran</label>
-                <select id="role" name="role" required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-field focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
-                    <option value="" disabled selected>-- Pilih Peran --</option>
-                    @foreach ($role as $r)
-                        <option value="{{ $r->name }}">{{ ucfirst($r->name) }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <div class="md:w-2/3 p-8">
+            <form id="registerForm" method="POST">
+                @csrf
+                <div class="form-step active" id="step1">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Pilih Peran Anda</h2>
+                    <p class="text-gray-500 mb-8">Peran akan menentukan informasi yang perlu diisi selanjutnya.</p>
 
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-field focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
-            </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {{-- Loop melalui setiap peran yang dikirim dari controller --}}
+                        @foreach ($role as $role)
+                            <div class="role-card border-2 border-gray-200 rounded-xl p-4 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300 relative"
+                                data-role="{{ $role->name }}">
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-field focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
-            </div>
+                                {{-- Menggunakan ikon general yang sama untuk semua peran --}}
+                                <i class="fas fa-user-circle text-3xl text-green-500 mb-3"></i>
 
-            <div class="pt-2">
-                <button type="submit"
-                    class="w-full login-btn bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200">
-                    Masuk
-                </button>
-            </div>
-        </form>
+                                {{-- Tampilkan nama peran dari database --}}
+                                <h3 class="font-bold text-md text-gray-800">{{ ucfirst($role->name) }}</h3>
 
-        <script>
-            document.getElementById("loginForm").addEventListener("submit", function(e) {
-                e.preventDefault();
-                const role = document.getElementById("role").value;
-                const username = document.getElementById("username").value;
-                const password = document.getElementById("password").value;
+                                <i
+                                    class="fas fa-check-circle text-green-600 text-xl absolute top-3 right-3 opacity-0 transition-opacity duration-300"></i>
+                            </div>
+                        @endforeach
+                    </div>
+                    <p id="roleError" class="text-red-500 text-sm mt-4 h-5"></p>
+                    <input type="hidden" id="role" name="role">
 
-                // Simple validation
-                if (!role) {
-                    alert("Silakan pilih peran terlebih dahulu!");
-                    return;
-                }
+                    <div class="flex justify-end mt-10">
+                        <button type="button"
+                            class="btn-next bg-green-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-600 transition-all duration-300 flex items-center gap-2">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
 
-                if (!username || !password) {
-                    alert("Username dan password harus diisi!");
-                    return;
-                }
+                <div class="form-step" id="step2">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Informasi Dasar</h2>
+                    <p class="text-gray-500 mb-8">Data ini akan digunakan untuk login ke akun Anda.</p>
 
-                // Simulate loading
-                const btn = e.target.querySelector('button[type="submit"]');
-                btn.disabled = true;
-                btn.innerHTML = '<span class="inline-block animate-spin mr-2">↻</span> Memproses...';
+                    <div class="space-y-6">
+                        <div>
+                            <label for="name" class="font-medium text-gray-700 block mb-2">Nama Lengkap</label>
+                            <input type="text" id="name" name="name" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                                placeholder="Masukkan nama lengkap Anda">
+                            <p class="error-message text-red-500 text-sm mt-1 h-5"></p>
+                        </div>
+                        <div>
+                            <label for="email" class="font-medium text-gray-700 block mb-2">Alamat Email</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                                placeholder="contoh@email.com">
+                            <p class="error-message text-red-500 text-sm mt-1 h-5"></p>
+                        </div>
+                        <div>
+                            <label for="password" class="font-medium text-gray-700 block mb-2">Password</label>
+                            <input type="password" id="password" name="password" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                                placeholder="Minimal 8 karakter">
+                            <p class="error-message text-red-500 text-sm mt-1 h-5"></p>
+                        </div>
+                    </div>
 
-                // Simulate API call
-                setTimeout(() => {
-                    if (role === "admin") {
-                        window.location.href = "dashoard_admin.html";
-                    } else if (role === "siswa") {
-                        window.location.href = "dashboard_siswa.html";
-                    }
-                }, 1000);
-            });
-        </script>
+                    <div class="flex justify-between mt-10">
+                        <button type="button"
+                            class="btn-prev bg-gray-200 text-gray-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </button>
+                        <button type="button"
+                            class="btn-next bg-green-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-600 transition-all duration-300 flex items-center gap-2">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
 
-        <p class="mt-8 text-center text-sm text-gray-500">
-            &copy; 2025 Koperasi Siswa. Semua hak cipta dilindungi.
-        </p>
+                <div class="form-step" id="step3">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Informasi Detail</h2>
+                    <p class="text-gray-500 mb-8">Lengkapi data sesuai dengan peran yang Anda pilih.</p>
+
+                    <div id="extraFields" class="space-y-6">
+                        {{-- Konten ini akan diisi oleh JavaScript --}}
+                    </div>
+
+                    <div class="flex justify-between mt-10">
+                        <button type="button"
+                            class="btn-prev bg-gray-200 text-gray-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </button>
+                        <button type="submit"
+                            class="bg-emerald-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-600 transition-all duration-300 flex items-center gap-2">
+                            <i class="fas fa-check"></i> Daftar Sekarang
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentStep = 1;
+            const formSteps = document.querySelectorAll('.form-step');
+            const stepItems = document.querySelectorAll('#step-indicator .step');
+            const nextButtons = document.querySelectorAll('.btn-next');
+            const prevButtons = document.querySelectorAll('.btn-prev');
+            const roleCards = document.querySelectorAll('.role-card');
+            const hiddenRoleInput = document.getElementById('role');
+            const registerForm = document.getElementById('registerForm');
+
+            // --- FUNGSI NAVIGASI & UPDATE UI ---
+            const goToStep = (stepNumber) => {
+                currentStep = stepNumber;
+                formSteps.forEach((step, index) => {
+                    step.classList.toggle('active', index + 1 === currentStep);
+                });
+                updateStepIndicator();
+            };
+
+            const updateStepIndicator = () => {
+                stepItems.forEach((step, index) => {
+                    const stepNumEl = step.querySelector('.step-number');
+                    const stepTextElements = step.querySelectorAll('p');
+                    const stepIndex = index + 1;
+
+                    // Reset classes
+                    stepNumEl.classList.remove('bg-white', 'text-green-600');
+                    stepNumEl.classList.add('bg-white/20', 'text-white');
+                    stepTextElements.forEach(p => p.classList.remove('text-white'));
+                    stepTextElements.forEach(p => p.classList.add('text-green-200'));
+                    step.querySelector('p:last-child').classList.remove('text-white');
+                    step.querySelector('p:last-child').classList.add('text-white');
+
+
+                    if (stepIndex < currentStep) { // Completed
+                        stepNumEl.innerHTML = `<i class="fas fa-check"></i>`;
+                        stepNumEl.classList.replace('bg-white/20', 'bg-white');
+                        stepNumEl.classList.replace('text-white', 'text-green-600');
+                    } else if (stepIndex === currentStep) { // Active
+                        stepNumEl.innerHTML = stepIndex;
+                        stepNumEl.classList.replace('bg-white/20', 'bg-white');
+                        stepNumEl.classList.replace('text-white', 'text-green-600');
+                        stepTextElements.forEach(p => p.classList.replace('text-green-200',
+                            'text-white'));
+                    } else { // Future
+                        stepNumEl.innerHTML = stepIndex;
+                    }
+                });
+            };
+
+            // --- EVENT LISTENERS ---
+            roleCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    roleCards.forEach(c => {
+                        c.classList.remove('selected', 'border-green-600', 'bg-green-50');
+                        c.querySelector('.fa-check-circle').classList.add('opacity-0');
+                    });
+                    card.classList.add('selected', 'border-green-600', 'bg-green-50');
+                    card.querySelector('.fa-check-circle').classList.remove('opacity-0');
+
+                    hiddenRoleInput.value = card.dataset.role;
+                    document.getElementById('roleError').textContent = '';
+                });
+            });
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (validateStep(currentStep)) {
+                        if (currentStep === 1) loadExtraFields();
+                        goToStep(currentStep + 1);
+                    }
+                });
+            });
+
+            prevButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    goToStep(currentStep - 1);
+                });
+            });
+
+            registerForm.addEventListener('submit', (e) => {
+                if (!validateStep(3)) {
+                    e.preventDefault();
+                    alert('Harap lengkapi semua data yang diperlukan di langkah terakhir.');
+                } else {
+                    alert('Pendaftaran berhasil!');
+                    // Form submission will proceed to backend
+                }
+            });
+
+            // --- VALIDASI ---
+            const showError = (inputElement, message) => {
+                const errorElement = inputElement.nextElementSibling;
+                inputElement.classList.add('border-red-500');
+                if (errorElement && errorElement.classList.contains('error-message')) errorElement.textContent =
+                    message;
+            };
+
+            const clearError = (inputElement) => {
+                const errorElement = inputElement.nextElementSibling;
+                inputElement.classList.remove('border-red-500');
+                if (errorElement && errorElement.classList.contains('error-message')) errorElement.textContent =
+                    '';
+            };
+
+            const validateStep = (step) => {
+                let isValid = true;
+                const activeStepDiv = document.getElementById(`step${step}`);
+
+                if (step === 1) {
+                    if (!hiddenRoleInput.value) {
+                        document.getElementById('roleError').textContent = 'Silakan pilih salah satu peran.';
+                        isValid = false;
+                    }
+                }
+
+                if (step === 2 || step === 3) {
+                    const inputs = activeStepDiv.querySelectorAll(
+                        'input[required], select[required], textarea[required]');
+                    inputs.forEach(input => {
+                        clearError(input);
+                        if (!input.value.trim()) {
+                            showError(input, 'Field ini wajib diisi.');
+                            isValid = false;
+                        } else if (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(input.value)) {
+                            showError(input, 'Format email tidak valid.');
+                            isValid = false;
+                        } else if (input.id === 'password' && input.value.length < 8) {
+                            showError(input, 'Password minimal 8 karakter.');
+                            isValid = false;
+                        }
+                    });
+                }
+
+                return isValid;
+            };
+
+            // --- KONTEN DINAMIS ---
+            const loadExtraFields = () => {
+                const role = hiddenRoleInput.value;
+                const extraFieldsContainer = document.getElementById("extraFields");
+                extraFieldsContainer.innerHTML = ""; // Selalu reset
+
+                const inputClass =
+                    "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition";
+                const errorMsgHTML = `<p class="error-message text-red-500 text-sm mt-1 h-5"></p>`;
+
+                let fieldsHTML = '';
+                if (role === "students") {
+                    fieldsHTML = `
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="nisn" class="font-medium text-gray-700 block mb-2">NISN</label>
+                                <input type="text" id="nisn" name="nisn" required class="${inputClass}" placeholder="Nomor Induk Siswa Nasional">
+                                ${errorMsgHTML}
+                            </div>
+                            <div>
+                                <label for="nis" class="font-medium text-gray-700 block mb-2">NIS</label>
+                                <input type="text" id="nis" name="nis" required class="${inputClass}" placeholder="Nomor Induk Siswa">
+                                ${errorMsgHTML}
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="date_of_birth" class="font-medium text-gray-700 block mb-2">Tanggal Lahir</label>
+                                <input type="date" id="date_of_birth" name="date_of_birth" required class="${inputClass}">
+                                ${errorMsgHTML}
+                            </div>
+                             <div class="sm:col-span-2">
+                                <label for="gender" class="font-medium text-gray-700 block mb-2">Jenis Kelamin</label>
+                                <select id="gender" name="gender" required class="${inputClass}">
+                                    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                                    <option value="L">Laki-laki</option>
+                                    <option value="P">Perempuan</option>
+                                </select>
+                                ${errorMsgHTML}
+                            </div>
+                             <div class="sm:col-span-2">
+                                <label for="address" class="font-medium text-gray-700 block mb-2">Alamat</label>
+                                <textarea id="address" name="address" required class="${inputClass}" rows="3" placeholder="Alamat lengkap"></textarea>
+                                ${errorMsgHTML}
+                            </div>
+                        </div>
+                    `;
+                } else if (role === "teachers" || role === "staff") {
+                    fieldsHTML = `
+                        <div>
+                            <label for="nip" class="font-medium text-gray-700 block mb-2">NIP</label>
+                            <input type="text" id="nip" name="nip" required class="${inputClass}" placeholder="Nomor Induk Pegawai">
+                            ${errorMsgHTML}
+                        </div>
+                        <div>
+                            <label for="gender" class="font-medium text-gray-700 block mb-2">Jenis Kelamin</label>
+                            <select id="gender" name="gender" required class="${inputClass}">
+                                <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                            ${errorMsgHTML}
+                        </div>
+                    `;
+                }
+                extraFieldsContainer.innerHTML = fieldsHTML;
+            };
+
+            // Inisialisasi tampilan awal
+            updateStepIndicator();
+        });
+    </script>
 </body>
 
 </html>
