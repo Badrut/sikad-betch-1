@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nisn', 20)->unique()->nullable();
             $table->string('nis', 10)->unique()->nullable();
+            $table->enum('gender', ['L', 'P']);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('student_class_id')->nullable()->constrained('student_classes')->onDelete('set null');
             $table->date('date_of_birth')->nullable();
