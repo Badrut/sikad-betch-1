@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,5 +18,15 @@ Route::middleware(['auth', 'role:admin'])->group(
         Route::get('/dashboard', function () {
             return view('dashboard');
         })->name('dashboard');
+    }
+);
+
+Route::middleware(['auth', 'role:student'])->group(
+    function () {
+        Route::get('/dashboard', [StudentController::class, "index"]);
+        Route::get('/raport', [StudentController::class, "rapot"]);
+        Route::get('/attendance', [StudentController::class, "absen"]);
+        Route::get('/schedule', [StudentController::class, "jadwal"]);
+        Route::get('/profile', [StudentController::class, "profil"]);
     }
 );
