@@ -21,12 +21,12 @@ Route::middleware(['auth', 'role:admin'])->group(
     }
 );
 
-Route::middleware(['auth', 'role:student'])->group(
+Route::middleware(['auth', 'role:students'])->group(
     function () {
-        Route::get('/dashboard', [StudentController::class, "index"]);
-        Route::get('/raport', [StudentController::class, "rapot"]);
-        Route::get('/attendance', [StudentController::class, "absen"]);
-        Route::get('/schedule', [StudentController::class, "jadwal"]);
-        Route::get('/profile', [StudentController::class, "profil"]);
+        Route::get('/student/dashboard', [StudentController::class, "index"]);
+        Route::get('/student/raport', [StudentController::class, "rapot"]);
+        Route::get('/student/attendance', [StudentController::class, "absen"]);
+        Route::get('/student/schedule', [StudentController::class, "jadwal"]);
+        Route::get('/student/profile', [StudentController::class, "profil"]);
     }
 );

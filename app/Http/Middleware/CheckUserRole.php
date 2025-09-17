@@ -17,19 +17,20 @@ class CheckUserRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (!Auth::check()) {
             return redirect('/login');
         }
 
         $user = Auth::user();
+        $role = Role::where('id', $user->role_id)->first();
+        if (!$role) {
+            return redirect('/login')->with('error', 'Role not found.');
+        }
 
-        $roleId = Role::where('name', $request->role)->first()->id;
-
-        if ($user->role_id === $roleId) {
+        if ($user->role_id === $role->id) {
             return $next($request);
         }
 
-        return redirect('/')->with('error', 'You do not have permission to view this page.');
+        return redirect('/login')->with('error', 'You do not have permission to view this page.');
     }
 }
