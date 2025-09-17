@@ -46,14 +46,15 @@
                 <img src="{{ asset('assets/logo.png') }}" alt="Logo Koperasi" class="mx-auto"
                     style="width: 60px; height: 56px;">
             </div>
-            <h1 class="text-2xl font-bold text-gray-800 mb-1">Login Koperasi</h1>
+            <h1 class="text-2xl font-bold text-gray-800 mb-1">Login Sekolah</h1>
             <p class="text-gray-500 text-sm">Masuk untuk mengakses akun Anda</p>
         </div>
 
-        <form id="loginForm" class="space-y-6">
+        <form id="loginForm" method="POST" action="{{ route('login.post') }}" class="space-y-6">
+            @csrf
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input type="text" id="email" name="email" placeholder="Masukkan Email Anda" required
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg input-field focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition duration-200">
             </div>
 

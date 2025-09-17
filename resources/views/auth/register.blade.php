@@ -48,7 +48,6 @@
                 <h2 class="text-2xl font-bold">Pendaftaran Anggota</h2>
                 <p class="text-green-200 mt-2 text-sm">Lengkapi data Anda melalui langkah-langkah berikut.</p>
             </div>
-
             <ul class="mt-12 space-y-4" id="step-indicator">
                 <li class="step flex items-center" data-step="1">
                     <div
@@ -81,24 +80,17 @@
         </div>
 
         <div class="md:w-2/3 p-8">
-            <form id="registerForm" method="POST">
+            <form id="registerForm" method="POST" action="{{ route('register.store') }}">
                 @csrf
                 <div class="form-step active" id="step1">
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Pilih Peran Anda</h2>
                     <p class="text-gray-500 mb-8">Peran akan menentukan informasi yang perlu diisi selanjutnya.</p>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {{-- Loop melalui setiap peran yang dikirim dari controller --}}
                         @foreach ($role as $role)
                             <div class="role-card border-2 border-gray-200 rounded-xl p-4 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300 relative"
                                 data-role="{{ $role->name }}">
-
-                                {{-- Menggunakan ikon general yang sama untuk semua peran --}}
                                 <i class="fas fa-user-circle text-3xl text-green-500 mb-3"></i>
-
-                                {{-- Tampilkan nama peran dari database --}}
                                 <h3 class="font-bold text-md text-gray-800">{{ ucfirst($role->name) }}</h3>
-
                                 <i
                                     class="fas fa-check-circle text-green-600 text-xl absolute top-3 right-3 opacity-0 transition-opacity duration-300"></i>
                             </div>
@@ -106,7 +98,6 @@
                     </div>
                     <p id="roleError" class="text-red-500 text-sm mt-4 h-5"></p>
                     <input type="hidden" id="role" name="role">
-
                     <div class="flex justify-end mt-10">
                         <button type="button"
                             class="btn-next bg-green-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-600 transition-all duration-300 flex items-center gap-2">
@@ -118,7 +109,6 @@
                 <div class="form-step" id="step2">
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Informasi Dasar</h2>
                     <p class="text-gray-500 mb-8">Data ini akan digunakan untuk login ke akun Anda.</p>
-
                     <div class="space-y-6">
                         <div>
                             <label for="name" class="font-medium text-gray-700 block mb-2">Nama Lengkap</label>
@@ -141,8 +131,15 @@
                                 placeholder="Minimal 8 karakter">
                             <p class="error-message text-red-500 text-sm mt-1 h-5"></p>
                         </div>
+                        <div>
+                            <label for="password_confirmation" class="font-medium text-gray-700 block mb-2">Konfirmasi
+                                Password</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                                placeholder="Masukkan ulang password Anda">
+                            <p class="error-message text-red-500 text-sm mt-1 h-5"></p>
+                        </div>
                     </div>
-
                     <div class="flex justify-between mt-10">
                         <button type="button"
                             class="btn-prev bg-gray-200 text-gray-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
@@ -158,11 +155,8 @@
                 <div class="form-step" id="step3">
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Informasi Detail</h2>
                     <p class="text-gray-500 mb-8">Lengkapi data sesuai dengan peran yang Anda pilih.</p>
-
                     <div id="extraFields" class="space-y-6">
-                        {{-- Konten ini akan diisi oleh JavaScript --}}
                     </div>
-
                     <div class="flex justify-between mt-10">
                         <button type="button"
                             class="btn-prev bg-gray-200 text-gray-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-all duration-300 flex items-center gap-2">
@@ -189,7 +183,6 @@
             const hiddenRoleInput = document.getElementById('role');
             const registerForm = document.getElementById('registerForm');
 
-            // --- FUNGSI NAVIGASI & UPDATE UI ---
             const goToStep = (stepNumber) => {
                 currentStep = stepNumber;
                 formSteps.forEach((step, index) => {
@@ -203,8 +196,6 @@
                     const stepNumEl = step.querySelector('.step-number');
                     const stepTextElements = step.querySelectorAll('p');
                     const stepIndex = index + 1;
-
-                    // Reset classes
                     stepNumEl.classList.remove('bg-white', 'text-green-600');
                     stepNumEl.classList.add('bg-white/20', 'text-white');
                     stepTextElements.forEach(p => p.classList.remove('text-white'));
@@ -212,24 +203,22 @@
                     step.querySelector('p:last-child').classList.remove('text-white');
                     step.querySelector('p:last-child').classList.add('text-white');
 
-
-                    if (stepIndex < currentStep) { // Completed
+                    if (stepIndex < currentStep) {
                         stepNumEl.innerHTML = `<i class="fas fa-check"></i>`;
                         stepNumEl.classList.replace('bg-white/20', 'bg-white');
                         stepNumEl.classList.replace('text-white', 'text-green-600');
-                    } else if (stepIndex === currentStep) { // Active
+                    } else if (stepIndex === currentStep) {
                         stepNumEl.innerHTML = stepIndex;
                         stepNumEl.classList.replace('bg-white/20', 'bg-white');
                         stepNumEl.classList.replace('text-white', 'text-green-600');
                         stepTextElements.forEach(p => p.classList.replace('text-green-200',
                             'text-white'));
-                    } else { // Future
+                    } else {
                         stepNumEl.innerHTML = stepIndex;
                     }
                 });
             };
 
-            // --- EVENT LISTENERS ---
             roleCards.forEach(card => {
                 card.addEventListener('click', () => {
                     roleCards.forEach(c => {
@@ -238,7 +227,6 @@
                     });
                     card.classList.add('selected', 'border-green-600', 'bg-green-50');
                     card.querySelector('.fa-check-circle').classList.remove('opacity-0');
-
                     hiddenRoleInput.value = card.dataset.role;
                     document.getElementById('roleError').textContent = '';
                 });
@@ -264,24 +252,24 @@
                     e.preventDefault();
                     alert('Harap lengkapi semua data yang diperlukan di langkah terakhir.');
                 } else {
-                    alert('Pendaftaran berhasil!');
-                    // Form submission will proceed to backend
+                    registerForm.submit();
                 }
             });
 
-            // --- VALIDASI ---
             const showError = (inputElement, message) => {
                 const errorElement = inputElement.nextElementSibling;
                 inputElement.classList.add('border-red-500');
-                if (errorElement && errorElement.classList.contains('error-message')) errorElement.textContent =
-                    message;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.textContent = message;
+                }
             };
 
             const clearError = (inputElement) => {
                 const errorElement = inputElement.nextElementSibling;
                 inputElement.classList.remove('border-red-500');
-                if (errorElement && errorElement.classList.contains('error-message')) errorElement.textContent =
-                    '';
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.textContent = '';
+                }
             };
 
             const validateStep = (step) => {
@@ -295,7 +283,36 @@
                     }
                 }
 
-                if (step === 2 || step === 3) {
+                if (step === 2) {
+                    const nameInput = document.getElementById('name');
+                    const emailInput = document.getElementById('email');
+                    const passwordInput = document.getElementById('password');
+                    const passwordConfirmationInput = document.getElementById('password_confirmation');
+
+                    clearError(nameInput);
+                    clearError(emailInput);
+                    clearError(passwordInput);
+                    clearError(passwordConfirmationInput);
+
+                    if (!nameInput.value.trim()) {
+                        showError(nameInput, 'Nama wajib diisi.');
+                        isValid = false;
+                    }
+                    if (!emailInput.value.trim() || !/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+                        showError(emailInput, 'Email tidak valid.');
+                        isValid = false;
+                    }
+                    if (!passwordInput.value.trim() || passwordInput.value.length < 8) {
+                        showError(passwordInput, 'Password minimal 8 karakter.');
+                        isValid = false;
+                    }
+                    if (passwordInput.value !== passwordConfirmationInput.value) {
+                        showError(passwordConfirmationInput, 'Konfirmasi password tidak cocok.');
+                        isValid = false;
+                    }
+                }
+
+                if (step === 3) {
                     const inputs = activeStepDiv.querySelectorAll(
                         'input[required], select[required], textarea[required]');
                     inputs.forEach(input => {
@@ -303,30 +320,21 @@
                         if (!input.value.trim()) {
                             showError(input, 'Field ini wajib diisi.');
                             isValid = false;
-                        } else if (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(input.value)) {
-                            showError(input, 'Format email tidak valid.');
-                            isValid = false;
-                        } else if (input.id === 'password' && input.value.length < 8) {
-                            showError(input, 'Password minimal 8 karakter.');
-                            isValid = false;
                         }
                     });
                 }
-
                 return isValid;
             };
 
-            // --- KONTEN DINAMIS ---
             const loadExtraFields = () => {
                 const role = hiddenRoleInput.value;
                 const extraFieldsContainer = document.getElementById("extraFields");
-                extraFieldsContainer.innerHTML = ""; // Selalu reset
-
+                extraFieldsContainer.innerHTML = "";
                 const inputClass =
                     "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition";
                 const errorMsgHTML = `<p class="error-message text-red-500 text-sm mt-1 h-5"></p>`;
-
                 let fieldsHTML = '';
+
                 if (role === "students") {
                     fieldsHTML = `
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -345,7 +353,7 @@
                                 <input type="date" id="date_of_birth" name="date_of_birth" required class="${inputClass}">
                                 ${errorMsgHTML}
                             </div>
-                             <div class="sm:col-span-2">
+                            <div class="sm:col-span-2">
                                 <label for="gender" class="font-medium text-gray-700 block mb-2">Jenis Kelamin</label>
                                 <select id="gender" name="gender" required class="${inputClass}">
                                     <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
@@ -354,14 +362,14 @@
                                 </select>
                                 ${errorMsgHTML}
                             </div>
-                             <div class="sm:col-span-2">
+                            <div class="sm:col-span-2">
                                 <label for="address" class="font-medium text-gray-700 block mb-2">Alamat</label>
                                 <textarea id="address" name="address" required class="${inputClass}" rows="3" placeholder="Alamat lengkap"></textarea>
                                 ${errorMsgHTML}
                             </div>
                         </div>
                     `;
-                } else if (role === "teachers" || role === "staff") {
+                } else {
                     fieldsHTML = `
                         <div>
                             <label for="nip" class="font-medium text-gray-700 block mb-2">NIP</label>
@@ -382,7 +390,6 @@
                 extraFieldsContainer.innerHTML = fieldsHTML;
             };
 
-            // Inisialisasi tampilan awal
             updateStepIndicator();
         });
     </script>
