@@ -17,4 +17,12 @@ class StudentController extends Controller
     public function absen() {
     return view("siswa.attendance");
     }
+
+    public function jadwal() {
+    return view("siswa.schedule");
+    }
+
+    public function profil() {
+    return view("siswa.profile");
+    }
 }
